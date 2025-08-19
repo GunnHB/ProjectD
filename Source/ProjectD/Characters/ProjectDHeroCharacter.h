@@ -6,6 +6,9 @@
 #include "ProjectDBaseCharacter.h"
 #include "ProjectDHeroCharacter.generated.h"
 
+struct FInputActionValue;
+
+class UDataAsset_InputConfig;
 class UCameraComponent;
 class USpringArmComponent;
 /**
@@ -19,6 +22,8 @@ class PROJECTD_API AProjectDHeroCharacter : public AProjectDBaseCharacter
 public:
 	AProjectDHeroCharacter();
 
+	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+
 private:
 #pragma region Components
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Camera", meta=(AllowPrivateAccess="true"))
@@ -27,4 +32,12 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Camera", meta=(AllowPrivateAccess="true"))
 	TObjectPtr<UCameraComponent> FollowCamera = nullptr;
 #pragma endregion
+
+#pragma region Inputs
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="CharacterData", meta=(AllowPrivateAccess="true"))
+	TObjectPtr<UDataAsset_InputConfig> InputConfigDataAsset = nullptr;
+
+	void Input_Move(const FInputActionValue& Value);
+	void Input_Look(const FInputActionValue& Value);
+#pragma endregion 
 };

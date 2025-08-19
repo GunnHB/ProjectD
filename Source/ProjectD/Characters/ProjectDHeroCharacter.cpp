@@ -7,6 +7,13 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 
+#include "EnhancedInputSubsystems.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "ProjectD/ProjectDGameplayTags.h"
+#include "ProjectD/Components/Input/ProjectDInputComponent.h"
+
+#include "ProjectD/DataAssets/Input/DataAsset_InputConfig.h"
+
 AProjectDHeroCharacter::AProjectDHeroCharacter()
 {
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.f);
@@ -24,4 +31,59 @@ AProjectDHeroCharacter::AProjectDHeroCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
+
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	GetCharacterMovement()->RotationRate = FRotator(0.f, 500.f, 0.f);
+	GetCharacterMovement()->MaxWalkSpeed = 400.f;
+	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
+}
+
+void AProjectDHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	checkf(InputConfigDataAsset, TEXT("forgot to assign a valid data asset as input config"));
+
+	ULocalPlayer* LocalPlayer = GetController<APlayerController>()->GetLocalPlayer();
+	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(LocalPlayer);
+
+	check(Subsystem);
+
+	Subsystem->AddMappingContext(InputConfigDataAsset->DefaultMappingContext, 0);
+
+	UProjectDInputComponent* ProjectDInputComponent = CastChecked<UProjectDInputComponent>(PlayerInputComponent);
+
+	ProjectDInputComponent->BindNativeInputAction(InputConfigDataAsset, ProjectDGameplayTags::InputTag_Move, ETriggerEvent::Triggered, this, &ThisClass::Input_Move);
+	ProjectDInputComponent->BindNativeInputAction(InputConfigDataAsset, ProjectDGameplayTags::InputTag_Look, ETriggerEvent::Triggered, this, &ThisClass::Input_Look);
+}
+
+void AProjectDHeroCharacter::Input_Move(const FInputActionValue& Value)
+{
+	const FVector2D MovementVector = Value.Get<FVector2D>();
+	const FRotator MovementRotation(0.f, Controller->GetControlRotation().Yaw, 0.f);
+
+	if (MovementVector.Y != 0.f)
+	{
+		const FVector ForwardDirection = MovementRotation.RotateVector(FVector::ForwardVector);
+
+		AddMovementInput(ForwardDirection, MovementVector.Y);
+	}
+
+	if (MovementVector.X != 0.f)
+	{
+		const FVector RightDirection = MovementRotation.RotateVector(FVector::RightVector);
+
+		AddMovementInput(RightDirection, MovementVector.X);
+	}
+}
+
+void AProjectDHeroCharacter::Input_Look(const FInputActionValue& Value)
+{
+	const FVector2D LookAxisVector = Value.Get<FVector2D>();
+
+	if (LookAxisVector.X != 0.f)
+		AddControllerYawInput(LookAxisVector.X);
+
+	if (LookAxisVector.Y != 0.f)
+		AddControllerPitchInput(LookAxisVector.Y);
 }
