@@ -15,10 +15,14 @@ public class ProjectD : ModuleRules
 			"Engine",
 			"InputCore",
 			"EnhancedInput",
-			"GameplayTags",
 		});
 
-		PrivateDependencyModuleNames.AddRange(new string[] {  });
+		PrivateDependencyModuleNames.AddRange(new string[]
+		{
+			"GameplayTags",
+			"GameplayAbilities",
+			"GameplayTasks",
+		});
 
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
