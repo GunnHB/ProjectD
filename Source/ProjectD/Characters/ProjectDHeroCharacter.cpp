@@ -14,6 +14,7 @@
 #include "ProjectD/ProjectDGameplayTags.h"
 #include "ProjectD/AbilitySystem/ProjectDAbilitySystemComponent.h"
 #include "ProjectD/AbilitySystem/ProjectDAttributeSet.h"
+#include "ProjectD/Components/Combat/HeroCombatComponent.h"
 #include "ProjectD/Components/Input/ProjectDInputComponent.h"
 
 #include "ProjectD/DataAssets/Input/DataAsset_InputConfig.h"
@@ -41,6 +42,8 @@ AProjectDHeroCharacter::AProjectDHeroCharacter()
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 500.f, 0.f);
 	GetCharacterMovement()->MaxWalkSpeed = 500.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
+
+	HeroCombatComponent = CreateDefaultSubobject<UHeroCombatComponent>(TEXT("HeroCombatComponent"));
 }
 
 void AProjectDHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
