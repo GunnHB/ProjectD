@@ -9,10 +9,15 @@
 
 #include "EnhancedInputSubsystems.h"
 #include "GameFramework/CharacterMovementComponent.h"
+
+#include "ProjectD/DevHelper.h"
 #include "ProjectD/ProjectDGameplayTags.h"
+#include "ProjectD/AbilitySystem/ProjectDAbilitySystemComponent.h"
+#include "ProjectD/AbilitySystem/ProjectDAttributeSet.h"
 #include "ProjectD/Components/Input/ProjectDInputComponent.h"
 
 #include "ProjectD/DataAssets/Input/DataAsset_InputConfig.h"
+#include "ProjectD/DataAssets/StartUpData/DataAsset_StartUpDataBase.h"
 
 AProjectDHeroCharacter::AProjectDHeroCharacter()
 {
@@ -55,6 +60,18 @@ void AProjectDHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 
 	ProjectDInputComponent->BindNativeInputAction(InputConfigDataAsset, ProjectDGameplayTags::InputTag_Move, ETriggerEvent::Triggered, this, &ThisClass::Input_Move);
 	ProjectDInputComponent->BindNativeInputAction(InputConfigDataAsset, ProjectDGameplayTags::InputTag_Look, ETriggerEvent::Triggered, this, &ThisClass::Input_Look);
+}
+
+void AProjectDHeroCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	if (CharacterStartUpData.IsNull() == false)
+	{
+		UDataAsset_StartUpDataBase* LoadedData = CharacterStartUpData.LoadSynchronous();
+		if (IsValid(LoadedData))
+			LoadedData->GiveToAbilitySystemComponent(ProjectDAbilitySystemComponent);
+	}
 }
 
 void AProjectDHeroCharacter::Input_Move(const FInputActionValue& Value)

@@ -6,6 +6,8 @@
 #include "ProjectD/AbilitySystem/ProjectDAbilitySystemComponent.h"
 #include "ProjectD/AbilitySystem/ProjectDAttributeSet.h"
 
+#include "ProjectD/DataAssets/StartUpData/DataAsset_StartUpDataBase.h"
+
 AProjectDBaseCharacter::AProjectDBaseCharacter()
 {
 	PrimaryActorTick.bCanEverTick = false;
@@ -27,5 +29,9 @@ void AProjectDBaseCharacter::PossessedBy(AController* NewController)
 	Super::PossessedBy(NewController);
 
 	if (IsValid(ProjectDAbilitySystemComponent))
+	{
 		ProjectDAbilitySystemComponent->InitAbilityActorInfo(this, this);
+
+		ensureMsgf(CharacterStartUpData.IsNull() == false, TEXT("forgot to assign start up data to %s"), *GetName());
+	}
 }

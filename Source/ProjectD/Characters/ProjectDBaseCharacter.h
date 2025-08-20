@@ -9,6 +9,8 @@
 
 #include "ProjectDBaseCharacter.generated.h"
 
+class UDataAsset_StartUpDataBase;
+
 class UProjectDAttributeSet;
 class UProjectDAbilitySystemComponent;
 
@@ -34,6 +36,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="AbilitySystem")
 	TObjectPtr<UProjectDAttributeSet> ProjectDAttributeSet = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="CharacterData")
+	TSoftObjectPtr<UDataAsset_StartUpDataBase> CharacterStartUpData = nullptr;
 
 public:
 	FORCEINLINE UProjectDAbilitySystemComponent* GetProjectDAbilitySystemComponent() const { return ProjectDAbilitySystemComponent; }
