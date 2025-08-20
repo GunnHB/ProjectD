@@ -20,6 +20,9 @@ class PROJECTD_API UProjectDInputComponent : public UEnhancedInputComponent
 public:
 	template<typename UserObject, typename CallbackFunc>
 	void BindNativeInputAction(const UDataAsset_InputConfig* InInputConfig, const FGameplayTag& InInputTag, ETriggerEvent TriggerEvent, UserObject* ContextObject, CallbackFunc Func);
+
+	template<typename UserObject, typename CallbackFunc>
+	void BindAbilityInputAction(const UDataAsset_InputConfig* InInputConfig, UserObject* ContextObject, CallbackFunc InputPressFunc, CallbackFunc InputReleaseFunc);
 };
 
 template <typename UserObject, typename CallbackFunc>
@@ -30,4 +33,19 @@ void UProjectDInputComponent::BindNativeInputAction(const UDataAsset_InputConfig
 	UInputAction* FoundAction = InInputConfig->FindNativeInputActionByTag(InInputTag);
 	if (IsValid(FoundAction))
 		BindAction(FoundAction, TriggerEvent, ContextObject, Func);
+}
+
+template <typename UserObject, typename CallbackFunc>
+void UProjectDInputComponent::BindAbilityInputAction(const UDataAsset_InputConfig* InInputConfig, UserObject* ContextObject, CallbackFunc InputPressFunc, CallbackFunc InputReleaseFunc)
+{
+	checkf(InInputConfig, TEXT("input config data asset is null. can not proceed with binding"));
+
+	for (const FProjectDInputActionConfig& AbilityInputActionConfig : InInputConfig->AbilityInputActions)
+	{
+		if (AbilityInputActionConfig.IsValid() == false)
+			continue;
+
+		BindAction(AbilityInputActionConfig.InputAction, ETriggerEvent::Started, ContextObject, InputPressFunc, AbilityInputActionConfig.InputTag);
+		BindAction(AbilityInputActionConfig.InputAction, ETriggerEvent::Completed, ContextObject, InputReleaseFunc, AbilityInputActionConfig.InputTag);
+	}
 }

@@ -63,6 +63,8 @@ void AProjectDHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 
 	ProjectDInputComponent->BindNativeInputAction(InputConfigDataAsset, ProjectDGameplayTags::InputTag_Move, ETriggerEvent::Triggered, this, &ThisClass::Input_Move);
 	ProjectDInputComponent->BindNativeInputAction(InputConfigDataAsset, ProjectDGameplayTags::InputTag_Look, ETriggerEvent::Triggered, this, &ThisClass::Input_Look);
+
+	ProjectDInputComponent->BindAbilityInputAction(InputConfigDataAsset, this, &ThisClass::Input_AbilityInputPressed, &ThisClass::Input_AbilityInputReleased);
 }
 
 void AProjectDHeroCharacter::PossessedBy(AController* NewController)
@@ -106,4 +108,13 @@ void AProjectDHeroCharacter::Input_Look(const FInputActionValue& Value)
 
 	if (LookAxisVector.Y != 0.f)
 		AddControllerPitchInput(LookAxisVector.Y);
+}
+
+void AProjectDHeroCharacter::Input_AbilityInputPressed(FGameplayTag InInputTag)
+{
+	ProjectDAbilitySystemComponent->OnAbilityInputPressed(InInputTag);
+}
+
+void AProjectDHeroCharacter::Input_AbilityInputReleased(FGameplayTag InInputTag)
+{
 }
