@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "DataAsset_StartUpDataBase.h"
+#include "ProjectD/ProjectDStructTypes.h"
 #include "DataAsset_HeroStartUpData.generated.h"
 
 /**
@@ -13,5 +14,11 @@ UCLASS()
 class PROJECTD_API UDataAsset_HeroStartUpData : public UDataAsset_StartUpDataBase
 {
 	GENERATED_BODY()
-	
+
+public:
+	virtual void GiveToAbilitySystemComponent(UProjectDAbilitySystemComponent* InASCToGive, int32 ApplyLevel = 1) override;
+
+private:
+	UPROPERTY(EditDefaultsOnly, Category="StartUpData", meta=(TitleProperty="InputTag"))
+	TArray<FProjectDHeroAbilitySets> HeroStartUpAbilitySets;
 };
