@@ -4,6 +4,7 @@
 #include "ProjectDGameplayAbility.h"
 
 #include "AbilitySystemComponent.h"
+#include "ProjectD/Components/Combat/PawnCombatComponent.h"
 
 void UProjectDGameplayAbility::OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec)
 {
@@ -25,4 +26,9 @@ void UProjectDGameplayAbility::EndAbility(const FGameplayAbilitySpecHandle Handl
 		if (ActorInfo)
 			ActorInfo->AbilitySystemComponent->ClearAbility(Handle);
 	}
+}
+
+UPawnCombatComponent* UProjectDGameplayAbility::GetPawnCombatComponentFromActorInfo() const
+{
+	return GetAvatarActorFromActorInfo()->FindComponentByClass<UPawnCombatComponent>();
 }
