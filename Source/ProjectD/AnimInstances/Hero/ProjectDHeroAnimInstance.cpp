@@ -3,3 +3,13 @@
 
 #include "ProjectDHeroAnimInstance.h"
 
+#include "ProjectD/Characters/ProjectDBaseCharacter.h"
+#include "ProjectD/Characters/ProjectDHeroCharacter.h"
+
+void UProjectDHeroAnimInstance::NativeInitializeAnimation()
+{
+	Super::NativeInitializeAnimation();
+
+	if (IsValid(OwningCharacter))
+		OwningHeroCharacter = Cast<AProjectDHeroCharacter>(OwningCharacter);
+}

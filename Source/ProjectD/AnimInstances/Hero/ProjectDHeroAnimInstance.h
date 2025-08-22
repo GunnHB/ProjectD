@@ -7,6 +7,7 @@
 
 #include "ProjectDHeroAnimInstance.generated.h"
 
+class AProjectDHeroCharacter;
 /**
  * 
  */
@@ -14,5 +15,11 @@ UCLASS()
 class PROJECTD_API UProjectDHeroAnimInstance : public UProjectDCharacterAnimInstance
 {
 	GENERATED_BODY()
-	
+
+public:
+	virtual void NativeInitializeAnimation() override;
+
+protected:
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category="AnimData|References")
+	TObjectPtr<AProjectDHeroCharacter> OwningHeroCharacter = nullptr;
 };
