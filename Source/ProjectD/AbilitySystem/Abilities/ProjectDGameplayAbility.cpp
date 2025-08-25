@@ -4,6 +4,7 @@
 #include "ProjectDGameplayAbility.h"
 
 #include "AbilitySystemComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "ProjectD/Components/Combat/PawnCombatComponent.h"
 
 void UProjectDGameplayAbility::OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec)
@@ -31,4 +32,9 @@ void UProjectDGameplayAbility::EndAbility(const FGameplayAbilitySpecHandle Handl
 UPawnCombatComponent* UProjectDGameplayAbility::GetPawnCombatComponentFromActorInfo() const
 {
 	return GetAvatarActorFromActorInfo()->FindComponentByClass<UPawnCombatComponent>();
+}
+
+UCharacterMovementComponent* UProjectDGameplayAbility::GetCharacterMovementComponentFromActorInfo() const
+{
+	return GetAvatarActorFromActorInfo()->FindComponentByClass<UCharacterMovementComponent>();
 }
