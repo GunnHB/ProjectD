@@ -20,10 +20,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Character|Combat")
 	FCombatData CombatData;
 
-	UPROPERTY(BlueprintReadWrite, Category="Character|Combat")
-	bool bIsCombatStance = false;
-
 public:
 	FORCEINLINE FCombatData GetCombatData() const { return CombatData; }
-	FORCEINLINE bool IsCombatStance() const { return bIsCombatStance; }
 };
