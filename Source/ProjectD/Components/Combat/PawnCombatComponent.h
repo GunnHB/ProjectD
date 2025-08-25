@@ -20,6 +20,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Character|Combat")
 	FCombatData CombatData;
 
+	UPROPERTY(BlueprintReadWrite, Category="Character|Combat")
+	FGameplayTag CombatStatusTag;
+
 public:
 	FORCEINLINE FCombatData GetCombatData() const { return CombatData; }
 };
