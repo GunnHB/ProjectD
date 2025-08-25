@@ -14,6 +14,8 @@ namespace ProjectDGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(Player_Ability_Attack_Heavy, "Player.Ability.Attack.Heavy");
 
 	/* Shared Tags */
+	UE_DEFINE_GAMEPLAY_TAG(Shared_Status_Combat, "Shared.Status.Combat");
+	
 	UE_DEFINE_GAMEPLAY_TAG(Shared_Event_EnterCombat, "Shared.Event.EnterCombat");
 	UE_DEFINE_GAMEPLAY_TAG(Shared_Event_LeaveCombat, "Shared.Event.LeaveCombat");
 }
