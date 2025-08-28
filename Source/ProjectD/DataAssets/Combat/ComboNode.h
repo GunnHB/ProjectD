@@ -5,7 +5,7 @@
 #include "GameplayTagContainer.h"
 #include "ComboNode.generated.h"
 
-UCLASS(BlueprintType)
+UCLASS(Blueprintable, EditInlineNew)
 class UComboNode : public UObject
 {
 	GENERATED_BODY()

@@ -16,6 +16,6 @@ class PROJECTD_API UDataAsset_CombatConfig : public UDataAsset
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Instanced)
 	TObjectPtr<UComboNode> RootNode = nullptr;
 };
