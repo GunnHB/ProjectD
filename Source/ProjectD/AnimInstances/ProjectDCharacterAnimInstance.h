@@ -4,8 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "ProjectDBaseAnimInstance.h"
+#include "ProjectD/ProjectDStructTypes.h"
 #include "ProjectDCharacterAnimInstance.generated.h"
 
+class UProjectDFootIKComponent;
 class UCharacterMovementComponent;
 class AProjectDBaseCharacter;
 /**
@@ -27,6 +29,9 @@ protected:
 	UPROPERTY()
 	TObjectPtr<UCharacterMovementComponent> OwningMovementComponent = nullptr;
 
+	UPROPERTY()
+	TObjectPtr<UProjectDFootIKComponent> OwningFootIKComponent = nullptr;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="AnimData|Locomotion")
 	float GroundSpeed = 0.f;
 
@@ -35,4 +40,13 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="AnimData|Locomotion")
 	float LocomotionDirection = 0.f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="AnimData|FootIK")
+	FFootIKData LeftFootIKData;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="AnimData|FootIK")
+	FFootIKData RightFootIKData;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="AnimData|FootIK")
+	float PelvisOffset = 0.f;
 };

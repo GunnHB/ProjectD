@@ -5,6 +5,7 @@
 
 #include "ProjectD/AbilitySystem/ProjectDAbilitySystemComponent.h"
 #include "ProjectD/AbilitySystem/ProjectDAttributeSet.h"
+#include "ProjectD/Components/Movement/ProjectDFootIKComponent.h"
 
 #include "ProjectD/DataAssets/StartUpData/DataAsset_StartUpDataBase.h"
 
@@ -17,6 +18,8 @@ AProjectDBaseCharacter::AProjectDBaseCharacter()
 
 	ProjectDAbilitySystemComponent = CreateDefaultSubobject<UProjectDAbilitySystemComponent>(TEXT("ProjectDAbilitySystemComponent"));
 	ProjectDAttributeSet = CreateDefaultSubobject<UProjectDAttributeSet>(TEXT("ProjectDAttributeSet"));
+
+	ProjectDFootIKComponent = CreateDefaultSubobject<UProjectDFootIKComponent>(TEXT("ProjectDFootIKComponent"));
 }
 
 UAbilitySystemComponent* AProjectDBaseCharacter::GetAbilitySystemComponent() const

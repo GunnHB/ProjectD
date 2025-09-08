@@ -14,6 +14,8 @@ class UDataAsset_StartUpDataBase;
 class UProjectDAttributeSet;
 class UProjectDAbilitySystemComponent;
 
+class UProjectDFootIKComponent;
+
 UCLASS()
 class PROJECTD_API AProjectDBaseCharacter : public ACharacter, public IAbilitySystemInterface
 {
@@ -37,6 +39,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="AbilitySystem")
 	TObjectPtr<UProjectDAttributeSet> ProjectDAttributeSet = nullptr;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Movement")
+	TObjectPtr<UProjectDFootIKComponent> ProjectDFootIKComponent = nullptr;
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="CharacterData")
 	TSoftObjectPtr<UDataAsset_StartUpDataBase> CharacterStartUpData = nullptr;
 
