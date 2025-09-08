@@ -30,3 +30,22 @@ struct FCombatData
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<UProjectDHeroLinkedAnimInstance> CombatAnimLayerToLink = nullptr;
 };
+
+USTRUCT(BlueprintType)
+struct FFootIKData
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(BlueprintReadOnly, Category="FootIK")
+	FVector EffectorLocation = FVector::ZeroVector;
+
+	UPROPERTY(BlueprintReadOnly, Category="FootIK")
+	FRotator EffectorRotation = FRotator::ZeroRotator;
+
+	void Clear()
+	{
+		EffectorLocation = FVector::ZeroVector;
+		EffectorRotation = FRotator::ZeroRotator;
+	}
+};
