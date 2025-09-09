@@ -32,20 +32,10 @@ struct FCombatData
 };
 
 USTRUCT(BlueprintType)
-struct FFootIKData
+struct FFootIKInfo
 {
 	GENERATED_BODY()
 
-public:
-	UPROPERTY(BlueprintReadOnly, Category="FootIK")
-	FVector EffectorLocation = FVector::ZeroVector;
-
-	UPROPERTY(BlueprintReadOnly, Category="FootIK")
-	FRotator EffectorRotation = FRotator::ZeroRotator;
-
-	void Clear()
-	{
-		EffectorLocation = FVector::ZeroVector;
-		EffectorRotation = FRotator::ZeroRotator;
-	}
+	float Offset = 0.f;
+	FVector ImpactLocation = FVector::ZeroVector;
 };

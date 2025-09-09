@@ -23,7 +23,11 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	
-	void TraceFoot(const FName& SocketName, FFootIKData& OutFootIKData, float& OutOffset);
+	FFootIKInfo FootTrace(const FName& SocketName);
+	
+	void UpdateFootOffset(float DeltaTime, float TargetValue, float* EffectorValue, float InterpSpeed);
+	void UpdateFootRotation(float DeltaTime, const FRotator& TargetValue, FRotator* FootRotatorValue, float InterpSpeed);
+	FRotator NormalToRotator(const FVector& Vector);
 
 private:
 	UPROPERTY()
@@ -37,18 +41,26 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="FootIK|Settings", meta = (AllowPrivateAccess = "true"))
 	float TraceDistance = 0.f;
+
+	UPROPERTY(BlueprintReadOnly, Category="FootIK", meta=(AllowPrivateAccess="true"))
+	FRotator LeftFootRotation = FRotator::ZeroRotator;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="FootIK|State", meta = (AllowPrivateAccess = "true"))
-	FFootIKData LeftFootIKData;
+	UPROPERTY(BlueprintReadOnly, Category="FootIK", meta=(AllowPrivateAccess="true"))
+	FRotator RightFootRotation = FRotator::ZeroRotator;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="FootIK|State", meta = (AllowPrivateAccess = "true"))
-	FFootIKData RightFootIKData;
+	UPROPERTY(BlueprintReadOnly, Category="FootIK", meta=(AllowPrivateAccess="true"))
+	float LeftOffset = 0.f;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="FootIK|State", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(BlueprintReadOnly, Category="FootIK", meta=(AllowPrivateAccess="true"))
+	float RightOffset = 0.f;
+
+	UPROPERTY(BlueprintReadOnly, Category="FootIK", meta=(AllowPrivateAccess="true"))
 	float PelvisOffset = 0.f;
-
+	
 public:
-	FORCEINLINE const FFootIKData& GetLeftFootIKData() const { return LeftFootIKData; }
-	FORCEINLINE const FFootIKData& GetRightFootIKData() const { return RightFootIKData; }
-	FORCEINLINE float GetPelvisOffset() const { return PelvisOffset; }
+	FORCEINLINE float GetLeftOffset() const {return LeftOffset;}
+	FORCEINLINE float GetRightOffset() const {return RightOffset;}
+	FORCEINLINE float GetPelvisOffset() const {return PelvisOffset;}
+	FORCEINLINE FRotator GetLeftFootRotation() const {return LeftFootRotation;}
+	FORCEINLINE FRotator GetRightFootRotation() const {return RightFootRotation;}
 };

@@ -3,7 +3,9 @@
 
 #include "ProjectDFootIKComponent.h"
 
+#include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "ProjectD/DevHelper.h"
 #include "ProjectD/Characters/ProjectDBaseCharacter.h"
@@ -19,20 +21,27 @@ void UProjectDFootIKComponent::TickComponent(float DeltaTime, enum ELevelTick Ti
 
 	if (IsValid(SkeletalMeshComponent) == false || GetOwningPawn<AProjectDBaseCharacter>()->GetCharacterMovement()->IsFalling())
 	{
+		LeftOffset = 0.f;
+		RightOffset = 0.f;
 		PelvisOffset = 0.f;
-		LeftFootIKData.Clear();
-		RightFootIKData.Clear();
 
 		return;
 	}
 
-	float LeftFootOffset = 0.f;
-	float RightFootOffset = 0.f;
+	FFootIKInfo LeftFootTrace = FootTrace(LeftFootSocketName);
+	FFootIKInfo RightFootTrace = FootTrace(RightFootSocketName);
 
-	TraceFoot(LeftFootSocketName, LeftFootIKData, LeftFootOffset);
-	TraceFoot(RightFootSocketName, RightFootIKData, RightFootOffset);
+	UpdateFootRotation(DeltaTime, NormalToRotator(LeftFootTrace.ImpactLocation), &LeftFootRotation, 5.f);
+	UpdateFootRotation(DeltaTime, NormalToRotator(RightFootTrace.ImpactLocation), &RightFootRotation, 5.f);
 
-	PelvisOffset = FMath::Min(LeftFootOffset, RightFootOffset);
+	float TempPelvisOffset = UKismetMathLibrary::Min(LeftFootTrace.Offset, RightFootTrace.Offset);
+
+	if (TempPelvisOffset < 0.f == false)
+		TempPelvisOffset = 0.f;
+
+	UpdateFootOffset(DeltaTime, TempPelvisOffset, &PelvisOffset, 5.f);
+	UpdateFootOffset(DeltaTime, LeftFootTrace.Offset - TempPelvisOffset, &LeftOffset, 5.f);
+	UpdateFootOffset(DeltaTime, RightFootTrace.Offset - TempPelvisOffset, &RightOffset, 5.f);
 }
 
 void UProjectDFootIKComponent::BeginPlay()
@@ -43,28 +52,50 @@ void UProjectDFootIKComponent::BeginPlay()
 		SkeletalMeshComponent = GetOwningPawn<AProjectDBaseCharacter>()->GetMesh();
 }
 
-void UProjectDFootIKComponent::TraceFoot(const FName& SocketName, FFootIKData& OutFootIKData, float& OutOffset)
+FFootIKInfo UProjectDFootIKComponent::FootTrace(const FName& SocketName)
 {
-	const FVector SocketLocation = SkeletalMeshComponent->GetSocketLocation(SocketName);
-	const FVector TraceStart = FVector(SocketLocation.X, SocketLocation.Y, SocketLocation.Z + TraceDistance);
-	const FVector TraceEnd = FVector(SocketLocation.X, SocketLocation.Y, SocketLocation.Z - TraceDistance);
+	FFootIKInfo TraceInfo;
 
+	FVector SocketLocation = SkeletalMeshComponent->GetSocketLocation(SocketName);
+	FVector StartPoint = FVector(SocketLocation.X, SocketLocation.Y, GetOwningPawn()->GetActorLocation().Z);
+	FVector EndPoint = FVector(SocketLocation.X, SocketLocation.Y, GetOwningPawn()->GetActorLocation().Z - GetOwningPawn<ACharacter>()->GetCapsuleComponent()->GetScaledCapsuleHalfHeight() - TraceDistance);
+	
 	FHitResult HitResult;
 	TArray<AActor*> ActorsToIgnore;
 	ActorsToIgnore.Add(GetOwningPawn());
 
-	const bool bHit = UKismetSystemLibrary::LineTraceSingle(GetWorld(), TraceStart, TraceEnd, TraceTypeQuery1, false, ActorsToIgnore, EDrawDebugTrace::ForOneFrame, HitResult, true);
+	const bool bHit = UKismetSystemLibrary::LineTraceSingle(GetWorld(), StartPoint, EndPoint, TraceTypeQuery1, true, ActorsToIgnore, EDrawDebugTrace::ForOneFrame, HitResult, true);
+	TraceInfo.ImpactLocation = HitResult.Normal;
 
-	if (bHit)
-	{
-		OutFootIKData.EffectorLocation = HitResult.ImpactPoint;
-		OutFootIKData.EffectorRotation = FRotationMatrix::MakeFromZ(HitResult.ImpactNormal).Rotator();
-
-		OutOffset = HitResult.ImpactPoint.Z - SocketLocation.Z;
-	}
+	if (HitResult.IsValidBlockingHit())
+		TraceInfo.Offset = (HitResult.ImpactPoint - HitResult.TraceEnd).Size() - TraceDistance + 3.f;
 	else
-	{
-		OutFootIKData.Clear();
-		OutOffset = 0.f;
-	}
+		TraceInfo.Offset = 0.f;
+
+	return TraceInfo;
+}
+
+void UProjectDFootIKComponent::UpdateFootOffset(float DeltaTime, float TargetValue, float* EffectorValue, float InterpSpeed)
+{
+	float InterpValue = UKismetMathLibrary::FInterpTo(*EffectorValue, TargetValue, DeltaTime, InterpSpeed);
+	*EffectorValue = InterpValue;
+}
+
+void UProjectDFootIKComponent::UpdateFootRotation(float DeltaTime, const FRotator& TargetValue, FRotator* FootRotatorValue, float InterpSpeed)
+{
+	FRotator InterpRotator = UKismetMathLibrary::RInterpTo(*FootRotatorValue, TargetValue, DeltaTime, InterpSpeed);
+	*FootRotatorValue = InterpRotator;
+}
+
+FRotator UProjectDFootIKComponent::NormalToRotator(const FVector& Vector)
+{
+	// Roll
+	float Atan1 = UKismetMathLibrary::Atan2(Vector.Y, Vector.Z);
+	// Pitch
+	float Atan2 = UKismetMathLibrary::Atan2(Vector.X, Vector.Z);
+
+	Atan2 *= -1.f;
+	FRotator Result = FRotator(Atan2, 0.f, Atan1);
+
+	return Result;
 }
