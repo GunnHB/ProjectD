@@ -40,13 +40,19 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="AnimData|Locomotion")
 	float LocomotionDirection = 0.f;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="AnimData|FootIK")
-	FFootIKData LeftFootIKData;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="AnimData|FootIK")
-	FFootIKData RightFootIKData;
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="AnimData|FootIK")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="AnimData|FootIK")
 	float PelvisOffset = 0.f;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="AnimData|FootIK")
+	float LeftOffset = 0.f;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="AnimData|FootIK")
+	float RightOffset = 0.f;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="AnimData|FootIK")
+	FRotator LeftFootRotation;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="AnimData|FootIK")
+	FRotator RightFootRotation;
 };

@@ -28,8 +28,10 @@ void UProjectDCharacterAnimInstance::NativeThreadSafeUpdateAnimation(float Delta
 
 	if (IsValid(OwningFootIKComponent))
 	{
-		LeftFootIKData = OwningFootIKComponent->GetLeftFootIKData();
-		RightFootIKData = OwningFootIKComponent->GetRightFootIKData();
+		LeftOffset = OwningFootIKComponent->GetLeftOffset();
+		RightOffset = OwningFootIKComponent->GetRightOffset();
 		PelvisOffset = OwningFootIKComponent->GetPelvisOffset();
+		LeftFootRotation = OwningFootIKComponent->GetLeftFootRotation();
+		RightFootRotation = OwningFootIKComponent->GetRightFootRotation();
 	}
 }
