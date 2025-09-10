@@ -64,7 +64,7 @@ FFootIKInfo UProjectDFootIKComponent::FootTrace(const FName& SocketName)
 	TArray<AActor*> ActorsToIgnore;
 	ActorsToIgnore.Add(GetOwningPawn());
 
-	const bool bHit = UKismetSystemLibrary::LineTraceSingle(GetWorld(), StartPoint, EndPoint, TraceTypeQuery1, true, ActorsToIgnore, EDrawDebugTrace::ForOneFrame, HitResult, true);
+	const bool bHit = UKismetSystemLibrary::LineTraceSingle(GetWorld(), StartPoint, EndPoint, TraceTypeQuery1, true, ActorsToIgnore, EDrawDebugTrace::None, HitResult, true);
 	TraceInfo.ImpactLocation = HitResult.Normal;
 
 	if (HitResult.IsValidBlockingHit())
