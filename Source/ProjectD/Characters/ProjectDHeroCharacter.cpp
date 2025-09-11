@@ -16,6 +16,7 @@
 #include "ProjectD/AbilitySystem/ProjectDAttributeSet.h"
 #include "ProjectD/Components/Combat/HeroCombatComponent.h"
 #include "ProjectD/Components/Input/ProjectDInputComponent.h"
+#include "ProjectD/Components/Movement/ParkourComponent.h"
 
 #include "ProjectD/DataAssets/Input/DataAsset_InputConfig.h"
 #include "ProjectD/DataAssets/StartUpData/DataAsset_StartUpDataBase.h"
@@ -40,10 +41,12 @@ AProjectDHeroCharacter::AProjectDHeroCharacter()
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 500.f, 0.f);
-	GetCharacterMovement()->MaxWalkSpeed = 500.f;
+	GetCharacterMovement()->MaxWalkSpeed = 200.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 
 	HeroCombatComponent = CreateDefaultSubobject<UHeroCombatComponent>(TEXT("HeroCombatComponent"));
+
+	ParkourComponent = CreateDefaultSubobject<UParkourComponent>(TEXT("ParkourComponent"));
 }
 
 void AProjectDHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

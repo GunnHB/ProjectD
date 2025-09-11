@@ -7,6 +7,7 @@
 #include "ProjectDBaseCharacter.h"
 #include "ProjectDHeroCharacter.generated.h"
 
+class UParkourComponent;
 class UHeroCombatComponent;
 struct FInputActionValue;
 
@@ -39,6 +40,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Combat", meta=(AllowPrivateAccess="true"))
 	TObjectPtr<UHeroCombatComponent> HeroCombatComponent = nullptr;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Parkour", meta=(AllowPrivateAccess="true"))
+	TObjectPtr<UParkourComponent> ParkourComponent = nullptr;
 #pragma endregion
 
 #pragma region Inputs
