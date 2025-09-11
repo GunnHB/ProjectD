@@ -31,7 +31,7 @@ AProjectDHeroCharacter::AProjectDHeroCharacter()
 
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(GetRootComponent());
-	CameraBoom->TargetArmLength = 275.f;
+	CameraBoom->TargetArmLength = 180.f;
 	CameraBoom->SocketOffset = FVector(0.f, 55.f, 65.f);
 	CameraBoom->bUsePawnControlRotation = true;
 
