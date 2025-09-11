@@ -7,9 +7,11 @@ namespace ProjectDGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(InputTag_Move, "InputTag.Move");
 	UE_DEFINE_GAMEPLAY_TAG(InputTag_Look, "InputTag.Look");
 	UE_DEFINE_GAMEPLAY_TAG(InputTag_Attack_Light, "InputTag.Attack.Light");
+	UE_DEFINE_GAMEPLAY_TAG(InputTag_Sprint, "InputTag.Sprint");
 
 	/* Player Tags */
 	UE_DEFINE_GAMEPLAY_TAG(Player_Ability_Attack_Light, "Player.Ability.Attack.Light");
+	UE_DEFINE_GAMEPLAY_TAG(Player_Ability_Sprint, "Player.Ability.Sprint");
 
 	/* Shared Tags */
 	UE_DEFINE_GAMEPLAY_TAG(Shared_Status_Combat, "Shared.Status.Combat");
